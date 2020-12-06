@@ -27,9 +27,19 @@
                         
                         
                     </td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td></td>
+                    <td>{{ board.get_posts_count }}</td>
+                    <td>{{ board.topics.count }}</td>
+                    <td>
+                        {% with  post=board.get_last_post   %}
+                        {% if post %}
+                        {{ post.created_by.username }} : {{ post.created_dt }} 
+                        {% else %}
+                        <p><strong>No Posts right now </strong></p>  
+                        {% endif %}
+                        
+                            
+                        {% endwith %}
+                    </td>
                 </tr>
                 {% endfor %}
     

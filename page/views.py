@@ -5,6 +5,7 @@ from .models import Topic,Post
 from .forms import NewTopicForm , PostForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 # Create your views here.
 
@@ -16,7 +17,8 @@ def home(request):
     
 def board_topics(request,board_id):
     board = get_object_or_404(Board,pk=board_id)
-    return render(request,'page/topics.html',{'board':board})
+    topics = board.topics.order_by('-created_dt').annotate(comments=Count('posts'))#= to know how many comments ===
+    return render(request,'page/topics.html',{'board':board,'topics':topics})
 #==================================================================== end details =============    
 
 #====================================================================== start for new post form  ======================
@@ -51,7 +53,8 @@ def new_topic(request,board_id):
 #===================================================================== start details of  topic ===========================
 def topic_posts(request,board_id,topic_id):
     topic = get_object_or_404(Topic,board__pk=board_id,pk=topic_id)
-
+    topic.views +=1 #======= count the views =========
+    topic.save()
     return render(request,'page/topic_posts.html',{'topic':topic})
 #===================================================================     end details of topic ================
 
