@@ -1,7 +1,10 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login as auth_login
 from .forms import SignUpForm
+from django.views.generic import UpdateView
+from django.urls.base import reverse_lazy
 
 # Create your views here.
 def signup(request):
@@ -15,3 +18,12 @@ def signup(request):
         
 
     return render(request,'page/signup.html',{'form':form})
+
+#====================================================================
+class UserUpdateViews(UpdateView):
+    model = User
+    fields = ('first_name','last_name','email')
+    template_name = 'page/my_account.html'
+    success_url = reverse_lazy('my_account')
+    def get_object(self):
+        return self.request.user

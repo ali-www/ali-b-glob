@@ -24,6 +24,8 @@ class Topic(models.Model):
     created_by = models.ForeignKey(User,related_name='topic',on_delete=models.CASCADE) 
     created_dt = models.DateTimeField(auto_now_add=True)
     views = models.PositiveIntegerField(default=0)
+    updated_by = models.ForeignKey(User,null=True,related_name='+',on_delete=models.CASCADE)
+    updated_dt = models.DateTimeField(null=True)
     def __str__(self):
         return self.subject
 #===============================================================
@@ -32,6 +34,8 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic,related_name='posts',on_delete=models.CASCADE)
     created_by = models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE) 
     created_dt = models.DateTimeField(auto_now_add=True) 
+    updated_by = models.ForeignKey(User,related_name='+',null=True,on_delete=models.CASCADE)
+    updated_dt = models.DateTimeField(null=True) 
     def __str__(self):
         truncted_message = Truncator(self.message)
         return truncted_message.chars(40)   
